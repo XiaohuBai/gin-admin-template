@@ -2,7 +2,7 @@
  * @Author: XiaohuBai
  * @Date: 2020-11-25 10:00:25
  * @LastEditors: XiaohuBai
- * @LastEditTime: 2020-11-26 00:20:00
+ * @LastEditTime: 2020-12-01 15:15:32
  * @Description: 初始化数据库相关的文件
  */
 
@@ -32,7 +32,7 @@ func Gorm() *gorm.DB {
 // MysqlTables 注册数据库表专用
 func MysqlTables(db *gorm.DB) {
 	err := db.AutoMigrate(
-		model.SysUser{},
+		model.User{},
 	)
 	if err != nil {
 		global.GVA_LOG.Error("register table failed", zap.Any("err", err))

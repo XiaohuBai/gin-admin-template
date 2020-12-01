@@ -1,3 +1,10 @@
+/*
+ * @Author: XiaohuBai@outlook.com
+ * @Date: 2020-12-01 15:39:01
+ * @LastEditors: XiaohuBai
+ * @LastEditTime: 2020-12-01 15:39:44
+ * @Description: 描述
+ */
 package service
 
 import (
@@ -9,13 +16,9 @@ import (
 	"go.uber.org/zap"
 )
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: GetSystemConfig
-//@description: 读取配置文件
-//@return: err error, conf config.Server
-
-func GetSystemConfig() (err error, conf config.Server) {
-	return nil, global.GVA_CONFIG
+//GetSystemConfig 读取配置文件
+func GetSystemConfig() (conf config.Server, err error) {
+	return global.GVA_CONFIG, nil
 }
 
 // @description   set system config,

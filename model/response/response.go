@@ -1,8 +1,16 @@
+/*
+ * @Author: XiaohuBai@outlook.com
+ * @Date: 2020-12-01 15:57:46
+ * @LastEditors: XiaohuBai
+ * @LastEditTime: 2020-12-01 16:29:27
+ * @Description: 描述
+ */
 package response
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Response struct {
@@ -12,8 +20,8 @@ type Response struct {
 }
 
 const (
-	ERROR   = 7
-	SUCCESS = 0
+	ERROR   = -1
+	SUCCESS = 200
 )
 
 func Result(code int, data interface{}, msg string, c *gin.Context) {

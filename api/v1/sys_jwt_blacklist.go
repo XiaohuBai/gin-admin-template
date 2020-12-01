@@ -1,3 +1,11 @@
+/*
+ * @Author: XiaohuBai@outlook.com
+ * @Date: 2020-12-01 15:13:27
+ * @LastEditors: XiaohuBai
+ * @LastEditTime: 2020-12-01 15:42:09
+ * @Description: 描述
+ */
+
 package v1
 
 import (
@@ -5,21 +13,16 @@ import (
 	"gin-admin-template/model"
 	"gin-admin-template/model/response"
 	"gin-admin-template/service"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
-// @Tags Jwt
-// @Summary jwt加入黑名单
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"拉黑成功"}"
-// @Router /jwt/jsonInBlacklist [post]
-func JsonInBlacklist(c *gin.Context) {
+//JSONInBlacklist token加入黑名单
+func JSONInBlacklist(c *gin.Context) {
 	token := c.Request.Header.Get("x-token")
 	jwt := model.JwtBlacklist{Jwt: token}
-	if err := service.JsonInBlacklist(jwt); err != nil {
+	if err := service.JSONInBlacklist(jwt); err != nil {
 		global.GVA_LOG.Error("jwt作废失败!", zap.Any("err", err))
 		response.FailWithMessage("jwt作废失败", c)
 	} else {

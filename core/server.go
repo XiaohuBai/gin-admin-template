@@ -2,7 +2,7 @@
  * @Author: XiaohuBai
  * @Date: 2020-11-25 10:00:25
  * @LastEditors: XiaohuBai
- * @LastEditTime: 2020-11-25 23:31:45
+ * @LastEditTime: 2020-12-01 16:15:45
  * @Description: 描述
  */
 
@@ -40,8 +40,8 @@ func RunServer() {
 	fmt.Printf(`
 	欢迎使用 gin-admin-template
 	当前版本:V2.3.7
-	默认自动化文档地址:http://127.0.0.1%s/swagger/index.html
-	默认前端文件运行地址:http://127.0.0.1:8080
+	默认自动化文档地址:http://localhost%s/swagger/index.html
+	默认前端文件运行地址:http://localhost:8080
 	如果项目让您获得了收益，希望您能请团队喝杯可乐:https://www.gin-admin-template.com/docs/coffee
 `, address)
 	global.GVA_LOG.Error(s.ListenAndServe().Error())

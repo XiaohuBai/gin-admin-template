@@ -1,3 +1,11 @@
+/*
+ * @Author: XiaohuBai@outlook.com
+ * @Date: 2020-12-01 15:40:12
+ * @LastEditors: XiaohuBai
+ * @LastEditTime: 2020-12-01 15:43:30
+ * @Description: 描述
+ */
+ 
 package v1
 
 import (
@@ -5,18 +13,14 @@ import (
 	"gin-admin-template/model"
 	"gin-admin-template/model/response"
 	"gin-admin-template/service"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
-// @Tags System
-// @Summary 获取配置文件内容
-// @Security ApiKeyAuth
-// @Produce  application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /system/getSystemConfig [post]
+//GetSystemConfig 获取配置文件内容
 func GetSystemConfig(c *gin.Context) {
-	if err, config := service.GetSystemConfig(); err != nil {
+	if config, err := service.GetSystemConfig(); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
 		response.FailWithMessage("获取失败", c)
 	} else {
@@ -24,13 +28,7 @@ func GetSystemConfig(c *gin.Context) {
 	}
 }
 
-// @Tags System
-// @Summary 设置配置文件内容
-// @Security ApiKeyAuth
-// @Produce  application/json
-// @Param data body model.System true "设置配置文件内容"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
-// @Router /system/setSystemConfig [post]
+//SetSystemConfig 置配置文件内容
 func SetSystemConfig(c *gin.Context) {
 	var sys model.System
 	_ = c.ShouldBindJSON(&sys)
@@ -40,40 +38,4 @@ func SetSystemConfig(c *gin.Context) {
 	} else {
 		response.OkWithData("设置成功", c)
 	}
-}
-
-// 本方法开发中 开发者windows系统 缺少linux系统所需的包 因此搁置
-// @Tags System
-// @Summary 重启系统
-// @Security ApiKeyAuth
-// @Produce  application/json
-// @Param data body model.System true "重启系统"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"重启系统成功"}"
-// @Router /system/ReloadSystem [post]
-func ReloadSystem(c *gin.Context) {
-	var sys model.System
-	_ = c.ShouldBindJSON(&sys)
-	if err := service.SetSystemConfig(sys); err != nil {
-		global.GVA_LOG.Error("重启系统失败!", zap.Any("err", err))
-		response.FailWithMessage("重启系统失败", c)
-	} else {
-		response.OkWithMessage("重启系统成功", c)
-	}
-}
-
-// @Tags System
-// @Summary 获取服务器信息
-// @Security ApiKeyAuth
-// @Produce  application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /system/getServerInfo [post]
-func GetServerInfo(c *gin.Context) {
-	if server, err := service.GetServerInfo(); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
-		response.FailWithMessage("获取失败", c)
-		return
-	} else {
-		response.OkWithDetailed(gin.H{"server": server}, "获取成功", c)
-	}
-
 }

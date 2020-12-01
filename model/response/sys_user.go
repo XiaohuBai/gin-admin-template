@@ -1,3 +1,10 @@
+/*
+ * @Author: XiaohuBai@outlook.com
+ * @Date: 2020-12-01 14:50:22
+ * @LastEditors: XiaohuBai
+ * @LastEditTime: 2020-12-01 14:51:45
+ * @Description: 描述
+ */
 package response
 
 import (
@@ -5,11 +12,11 @@ import (
 )
 
 type SysUserResponse struct {
-	User model.SysUser `json:"user"`
+	User model.User `json:"user"`
 }
 
 type LoginResponse struct {
-	User      model.SysUser `json:"user"`
-	Token     string        `json:"token"`
-	ExpiresAt int64         `json:"expiresAt"`
+	UserInfo  model.User `json:"user"`
+	Token     string     `json:"token"`
+	ExpiresAt int64      `json:"expiresAt"`
 }
