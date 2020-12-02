@@ -1,27 +1,34 @@
 package utils
 
 import (
+	"runtime"
+	"time"
+
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/mem"
-	"runtime"
-	"time"
 )
 
 const (
-	B  = 1
+	// B B
+	B = 1
+	// KB KB
 	KB = 1024 * B
+	// MB MB
 	MB = 1024 * KB
+	// GB GB
 	GB = 1024 * MB
 )
 
+// Server 服务器结构体
 type Server struct {
 	Os   Os   `json:"os"`
-	Cpu  Cpu  `json:"cpu"`
+	CPU  CPU  `json:"cpu"`
 	Rrm  Rrm  `json:"ram"`
 	Disk Disk `json:"disk"`
 }
 
+// Os Os
 type Os struct {
 	GOOS         string `json:"goos"`
 	NumCPU       int    `json:"numCpu"`
@@ -30,18 +37,20 @@ type Os struct {
 	NumGoroutine int    `json:"numGoroutine"`
 }
 
-type Cpu struct {
+// CPU CPU
+type CPU struct {
 	Cpus  []float64 `json:"cpus"`
 	Cores int       `json:"cores"`
 }
 
-
+// Rrm Rrm
 type Rrm struct {
 	UsedMB      int `json:"usedMb"`
 	TotalMB     int `json:"totalMb"`
 	UsedPercent int `json:"usedPercent"`
 }
 
+// Disk Disk
 type Disk struct {
 	UsedMB      int `json:"usedMb"`
 	UsedGB      int `json:"usedGb"`
@@ -50,11 +59,7 @@ type Disk struct {
 	UsedPercent int `json:"usedPercent"`
 }
 
-//@author: [SliverHorn](https://github.com/SliverHorn)
-//@function: InitCPU
-//@description: OS信息
-//@return: o Os, err error
-
+// InitOS OS信息
 func InitOS() (o Os) {
 	o.GOOS = runtime.GOOS
 	o.NumCPU = runtime.NumCPU()
@@ -64,12 +69,8 @@ func InitOS() (o Os) {
 	return o
 }
 
-//@author: [SliverHorn](https://github.com/SliverHorn)
-//@function: InitCPU
-//@description: CPU信息
-//@return: c Cpu, err error
-
-func InitCPU() (c Cpu, err error) {
+// InitCPU CPU信息
+func InitCPU() (c CPU, err error) {
 	if cores, err := cpu.Counts(false); err != nil {
 		return c, err
 	} else {
@@ -83,15 +84,11 @@ func InitCPU() (c Cpu, err error) {
 	return c, nil
 }
 
-//@author: [SliverHorn](https://github.com/SliverHorn)
-//@function: InitRAM
-//@description: ARM信息
-//@return: r Rrm, err error
-
+// InitRAM ARM信息
 func InitRAM() (r Rrm, err error) {
-	if u, err := mem.VirtualMemory(); err != nil{
+	if u, err := mem.VirtualMemory(); err != nil {
 		return r, err
-	}else {
+	} else {
 		r.UsedMB = int(u.Used) / MB
 		r.TotalMB = int(u.Total) / MB
 		r.UsedPercent = int(u.UsedPercent)
@@ -99,13 +96,9 @@ func InitRAM() (r Rrm, err error) {
 	return r, nil
 }
 
-//@author: [SliverHorn](https://github.com/SliverHorn)
-//@function: InitDisk
-//@description: 硬盘信息
-//@return: d Disk, err error
-
+// InitDisk 硬盘信息
 func InitDisk() (d Disk, err error) {
-	if u, err := disk.Usage("/"); err != nil{
+	if u, err := disk.Usage("/"); err != nil {
 		return d, err
 	} else {
 		d.UsedMB = int(u.Used) / MB

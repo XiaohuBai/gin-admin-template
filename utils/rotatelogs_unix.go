@@ -1,4 +1,10 @@
-// +build !windows
+/*
+ * @Author: XiaohuBai@outlook.com
+ * @Date: 2020-12-01 23:17:31
+ * @LastEditors: XiaohuBai
+ * @LastEditTime: 2020-12-01 23:18:25
+ * @Description: 描述
+ */
 
 package utils
 
@@ -12,11 +18,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-//@author: [SliverHorn](https://github.com/SliverHorn)
-//@function: GetWriteSyncer
-//@description: zap logger中加入file-rotatelogs
-//@return: zapcore.WriteSyncer, error
-
+// GetWriteSyncer zap、logger中加入file-rotatelogs
 func GetWriteSyncer() (zapcore.WriteSyncer, error) {
 	fileWriter, err := zaprotatelogs.New(
 		path.Join(global.GVA_CONFIG.Zap.Director, "%Y-%m-%d.log"),

@@ -1,3 +1,11 @@
+/*
+ * @Author: XiaohuBai@outlook.com
+ * @Date: 2020-12-01 23:16:43
+ * @LastEditors: XiaohuBai
+ * @LastEditTime: 2020-12-01 23:43:52
+ * @Description: 描述
+ */
+
 package utils
 
 import (
@@ -5,12 +13,7 @@ import (
 	"encoding/hex"
 )
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: MD5V
-//@description: md5加密
-//@param: str []byte
-//@return: string
-
+// MD5V md5加密
 func MD5V(str []byte) string {
 	h := md5.New()
 	h.Write(str)

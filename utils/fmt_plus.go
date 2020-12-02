@@ -1,3 +1,11 @@
+/*
+ * @Author: XiaohuBai@outlook.com
+ * @Date: 2020-12-01 23:15:44
+ * @LastEditors: XiaohuBai
+ * @LastEditTime: 2020-12-01 23:16:30
+ * @Description: 描述
+ */
+
 package utils
 
 import (
@@ -6,12 +14,7 @@ import (
 	"strings"
 )
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: StructToMap
-//@description: 利用反射将结构体转化为map
-//@param: obj interface{}
-//@return: map[string]interface{}
-
+// StructToMap 利用反射将结构体转化为map
 func StructToMap(obj interface{}) map[string]interface{} {
 	obj1 := reflect.TypeOf(obj)
 	obj2 := reflect.ValueOf(obj)
@@ -23,12 +26,7 @@ func StructToMap(obj interface{}) map[string]interface{} {
 	return data
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: ArrayToString
-//@description: 将数组格式化为字符串
-//@param: array []interface{}
-//@return: string
-
+// ArrayToString 将数组格式化为字符串
 func ArrayToString(array []interface{}) string {
 	return strings.Replace(strings.Trim(fmt.Sprint(array), "[]"), " ", ",", -1)
 }

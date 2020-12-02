@@ -1,3 +1,11 @@
+/*
+ * @Author: XiaohuBai@outlook.com
+ * @Date: 2020-12-01 19:24:26
+ * @LastEditors: XiaohuBai
+ * @LastEditTime: 2020-12-01 19:24:49
+ * @Description: 描述
+ */
+
 package utils
 
 import (
@@ -7,12 +15,7 @@ import (
 	"go.uber.org/zap"
 )
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: PathExists
-//@description: 文件目录是否存在
-//@param: path string
-//@return: bool, error
-
+// PathExists 文件目录是否存在
 func PathExists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -24,12 +27,7 @@ func PathExists(path string) (bool, error) {
 	return false, err
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: CreateDir
-//@description: 批量创建文件夹
-//@param: dirs ...string
-//@return: err error
-
+// CreateDir 批量创建文件夹
 func CreateDir(dirs ...string) (err error) {
 	for _, v := range dirs {
 		exist, err := PathExists(v)

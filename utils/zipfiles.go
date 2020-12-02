@@ -1,3 +1,11 @@
+/*
+ * @Author: XiaohuBai@outlook.com
+ * @Date: 2020-12-01 23:36:59
+ * @LastEditors: XiaohuBai
+ * @LastEditTime: 2020-12-01 23:37:06
+ * @Description: 描述
+ */
+
 package utils
 
 import (
@@ -7,12 +15,7 @@ import (
 	"strings"
 )
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: ZipFiles
-//@description: 压缩文件
-//@param: filename string, files []string, oldform, newform string
-//@return: error
-
+//ZipFiles 压缩文件
 func ZipFiles(filename string, files []string, oldform, newform string) error {
 
 	newZipFile, err := os.Create(filename)

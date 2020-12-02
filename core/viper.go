@@ -2,7 +2,7 @@
  * @Author: XiaohuBai
  * @Date: 2020-11-25 10:00:25
  * @LastEditors: XiaohuBai
- * @LastEditTime: 2020-11-25 14:34:49
+ * @LastEditTime: 2020-12-01 18:49:06
  * @Description: 描述
  */
 
@@ -12,7 +12,6 @@ import (
 	"flag"
 	"fmt"
 	"gin-admin-template/global"
-	_ "gin-admin-template/packfile"
 	"gin-admin-template/utils"
 	"os"
 

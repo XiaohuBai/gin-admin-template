@@ -1,3 +1,11 @@
+/*
+ * @Author: XiaohuBai@outlook.com
+ * @Date: 2020-12-01 23:37:32
+ * @LastEditors: XiaohuBai
+ * @LastEditTime: 2020-12-01 23:42:23
+ * @Description: 描述
+ */
+
 package utils
 
 import (
@@ -14,69 +22,49 @@ import (
 const breakpointDir = "./breakpointDir/"
 const finishDir = "./fileDir/"
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: BreakPointContinue
-//@description: 断点续传
-//@param: content []byte, fileName string, contentNumber int, contentTotal int, fileMd5 string
-//@return: error, string
-
-func BreakPointContinue(content []byte, fileName string, contentNumber int, contentTotal int, fileMd5 string) (error, string) {
+// BreakPointContinue 断点续传
+func BreakPointContinue(content []byte, fileName string, contentNumber int, contentTotal int, fileMd5 string) (string, error) {
 	path := breakpointDir + fileMd5 + "/"
 	err := os.MkdirAll(path, os.ModePerm)
 	if err != nil {
-		return err, path
+		return path, err
 	}
-	err, pathc := makeFileContent(content, fileName, path, contentNumber)
-	return err, pathc
+	pathc, err := makeFileContent(content, fileName, path, contentNumber)
+	return pathc, err
 
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: CheckMd5
-//@description: 检查Md5
-//@param: content []byte, chunkMd5 string
-//@return: CanUpload bool
-
+// CheckMd5 检查Md5
 func CheckMd5(content []byte, chunkMd5 string) (CanUpload bool) {
 	fileMd5 := MD5V(content)
 	if fileMd5 == chunkMd5 {
 		return true // "可以继续上传"
-	} else {
-		return false // "切片不完整，废弃"
 	}
+	return false // "切片不完整，废弃"
+
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: makeFileContent
-//@description: 创建切片内容
-//@param: content []byte, fileName string, FileDir string, contentNumber int
-//@return: error, string
-
-func makeFileContent(content []byte, fileName string, FileDir string, contentNumber int) (error, string) {
+//makeFileContent 创建切片内容
+func makeFileContent(content []byte, fileName string, FileDir string, contentNumber int) (string, error) {
 	path := FileDir + fileName + "_" + strconv.Itoa(contentNumber)
 	f, err := os.Create(path)
 	defer f.Close()
 	if err != nil {
-		return err, path
+		return path, err
 	} else {
 		_, err = f.Write(content)
 		if err != nil {
-			return err, path
+			return path, err
 		}
 	}
-	return nil, path
+	return path, nil
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: makeFileContent
-//@description: 创建切片文件
-//@param: fileName string, FileMd5 string
-//@return: error, string
-
-func MakeFile(fileName string, FileMd5 string) (error, string) {
+//MakeFile 创建切片文件
+func MakeFile(fileName string, FileMd5 string) (string, error) {
 	rd, err := ioutil.ReadDir(breakpointDir + FileMd5)
 	if err != nil {
-		return err, finishDir + fileName
+		return finishDir + fileName, err
 	}
 	_ = os.MkdirAll(finishDir, os.ModePerm)
 	fd, _ := os.OpenFile(finishDir+fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
@@ -85,19 +73,14 @@ func MakeFile(fileName string, FileMd5 string) (error, string) {
 		_, err = fd.Write(content)
 		if err != nil {
 			_ = os.Remove(finishDir + fileName)
-			return err, finishDir + fileName
+			return finishDir + fileName, err
 		}
 	}
 	defer fd.Close()
-	return nil, finishDir + fileName
+	return finishDir + fileName, nil
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: RemoveChunk
-//@description: 移除切片
-//@param: FileMd5 string
-//@return: error
-
+// RemoveChunk 移除切片
 func RemoveChunk(FileMd5 string) error {
 	err := os.RemoveAll(breakpointDir + FileMd5)
 	return err
