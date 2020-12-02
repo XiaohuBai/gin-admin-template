@@ -43,6 +43,8 @@ system:
   db-type: 'mysql'
   oss-type: 'local'
   use-multipoint: false
+  name: 'vue-element-template'
+  logo: 'https://gitee.com/mydearzwj/image/raw/master/img/go-admin.png'
 
 # captcha configuration
 captcha:

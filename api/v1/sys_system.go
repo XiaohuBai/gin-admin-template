@@ -2,10 +2,10 @@
  * @Author: XiaohuBai@outlook.com
  * @Date: 2020-12-01 15:40:12
  * @LastEditors: XiaohuBai
- * @LastEditTime: 2020-12-01 15:43:30
+ * @LastEditTime: 2020-12-02 15:32:40
  * @Description: 描述
  */
- 
+
 package v1
 
 import (
@@ -24,7 +24,10 @@ func GetSystemConfig(c *gin.Context) {
 		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
 		response.FailWithMessage("获取失败", c)
 	} else {
-		response.OkWithDetailed(response.SysConfigResponse{Config: config}, "获取成功", c)
+		response.OkWithDetailed(response.SysConfigResponse{
+			Name: config.System.Name,
+			Logo: config.System.Logo,
+		}, "获取成功", c)
 	}
 }
 

@@ -35,6 +35,7 @@ func Login(c *gin.Context) {
 			token(*user, c)
 		}
 	} else {
+		global.GVA_LOG.Error("验证码错误")
 		response.FailWithMessage("验证码错误", c)
 	}
 }
@@ -60,9 +61,19 @@ func token(user model.User, c *gin.Context) {
 		response.FailWithMessage("获取token失败", c)
 		return
 	}
+	userInfo := response.UserInfo{
+		Username:  user.Username,
+		Phone:     user.Phone,
+		Role:      user.Role,
+		Nickname:  user.Nickname,
+		UUID:      user.UUID,
+		HeaderImg: user.HeaderImg,
+		Sex:       user.Sex,
+	}
+
 	if !global.GVA_CONFIG.System.UseMultipoint {
 		response.OkWithDetailed(response.LoginResponse{
-			UserInfo:  user,
+			UserInfo:  userInfo,
 			Token:     token,
 			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
 		}, "登录成功", c)
@@ -76,7 +87,7 @@ func token(user model.User, c *gin.Context) {
 			return
 		}
 		response.OkWithDetailed(response.LoginResponse{
-			UserInfo:  user,
+			UserInfo:  userInfo,
 			Token:     token,
 			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
 		}, "登录成功", c)
@@ -95,7 +106,7 @@ func token(user model.User, c *gin.Context) {
 			return
 		}
 		response.OkWithDetailed(response.LoginResponse{
-			UserInfo:  user,
+			UserInfo:  userInfo,
 			Token:     token,
 			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
 		}, "登录成功", c)
