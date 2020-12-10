@@ -13,7 +13,18 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 
-INSERT INTO users (`id`, `created_at`, `updated_at`, `deleted_at`, `uuid`, `role`, `username`, `password`, `nickname`, `phone`, `sex`, `email`, `header_img`) VALUES ('2', '2020-11-26 10:23:41', '2020-11-26 10:23:41', NULL, '7614068a-3992-4874-86f0-4ae1e289b379', '1','user001', 'e10adc3949ba59abbe56e057f20f883e', '小虎','18300697959','0','','http://xiaohubai.cn/head.png');
+INSERT INTO users (`id`, `created_at`, `updated_at`, `deleted_at`, `uuid`, `role`, `username`, `password`, `nickname`, `phone`, `sex`, `email`, `header_img`) 
+VALUES ('2', '2020-11-26 10:23:41', '2020-11-26 10:23:41', NULL, '7614068a-3992-4874-86f0-4ae1e289b379', '1','user001', 'e10adc3949ba59abbe56e057f20f883e', '小虎','18300697959','0','','http://xiaohubai.cn/head.png');
+
+INSERT INTO `role_menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_id`, `role`) 
+VALUES ('1', '2020-11-26 10:23:41', '2020-11-26 10:23:41', NULL, 1, 'admin');
+
+
+INSERT INTO `menus` (`id`, `created_at`, `updated_at`, `deleted_at`, `menu_id`, `parent_id`, `menu_type`, `path`, `name`, `hidden`, `component`, `title`, `icon`) 
+VALUES ('1', '2020-11-26 10:23:41', '2020-11-26 10:23:41', NULL, 1, 0, 'M', 'dashboard', 'dashboard', 0, 'view/dashboard/index.vue', '仪表盘', 'setting');
+
+
+
 
 type User struct {
 	gorm.Model

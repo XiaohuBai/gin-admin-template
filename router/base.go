@@ -2,7 +2,7 @@
  * @Author: XiaohuBai
  * @Date: 2020-11-25 10:00:25
  * @LastEditors: XiaohuBai
- * @LastEditTime: 2020-12-02 17:43:56
+ * @LastEditTime: 2020-12-03 20:05:14
  * @Description: 描述
  */
 
@@ -21,7 +21,6 @@ func InitBaseRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 		BaseRouter.POST("login", v1.Login)
 		BaseRouter.GET("captcha", v1.Captcha)
 		BaseRouter.GET("getSystemConfig", v1.GetSystemConfig)
-		BaseRouter.GET("roleMenus", v1.roleMenus)
 	}
 	return BaseRouter
 }

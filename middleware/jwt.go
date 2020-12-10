@@ -3,64 +3,18 @@ package middleware
 import (
 	"errors"
 	"gin-admin-template/global"
+	"gin-admin-template/model"
 	"gin-admin-template/model/request"
+	"gin-admin-template/model/response"
+	"gin-admin-template/service"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
-
-/* func JWTAuth() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// 我们这里jwt鉴权取头部信息 x-token 登录时回返回token信息 这里前端需要把token存储到cookie或者本地localStorage中 不过需要跟后端协商过期时间 可以约定刷新令牌或者重新登录
-		token := c.Request.Header.Get("x-token")
-		if token == "" {
-			response.FailWithDetailed(gin.H{"reload": true}, "未登录或非法访问", c)
-			c.Abort()
-			return
-		}
-		if service.IsBlacklist(token) {
-			response.FailWithDetailed(gin.H{"reload": true}, "您的帐户异地登陆或令牌失效", c)
-			c.Abort()
-			return
-		}
-		j := NewJWT()
-		// parseToken 解析token包含的信息
-		claims, err := j.ParseToken(token)
-		if err != nil {
-			if err == TokenExpired {
-				response.FailWithDetailed(gin.H{"reload": true}, "授权已过期", c)
-				c.Abort()
-				return
-			}
-			response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
-			c.Abort()
-			return
-		}
-		if err, _ = service.FindUserByUuid(claims.UUID.String()); err != nil {
-			_ = service.JsonInBlacklist(model.JwtBlacklist{Jwt: token})
-			response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
-			c.Abort()
-		}
-		if claims.ExpiresAt-time.Now().Unix() < claims.BufferTime {
-			claims.ExpiresAt = time.Now().Unix() + 60*60*24*7
-			newToken, _ := j.CreateToken(*claims)
-			newClaims, _ := j.ParseToken(newToken)
-			c.Header("new-token", newToken)
-			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt, 10))
-			if global.GVA_CONFIG.System.UseMultipoint {
-				err, RedisJwtToken := service.GetRedisJWT(newClaims.Username)
-				if err != nil {
-					global.GVA_LOG.Error("get redis jwt failed", zap.Any("err", err))
-				} else { // 当之前的取成功时才进行拉黑操作
-					_ = service.JsonInBlacklist(model.JwtBlacklist{Jwt: RedisJwtToken})
-				}
-				// 无论如何都要记录当前的活跃状态
-				_ = service.SetRedisJWT(newToken, newClaims.Username)
-			}
-		}
-		c.Set("claims", claims)
-		c.Next()
-	}
-} */
 
 type JWT struct {
 	SigningKey []byte
@@ -79,13 +33,69 @@ func NewJWT() *JWT {
 	}
 }
 
-// 创建一个token
+// JWTAuth token认证
+func JWTAuth() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		token := strings.Split(c.Request.Header.Get("Authorization"), " ")[1]
+		if token == "" {
+			response.FailWithDetailed(gin.H{"reload": true}, "未登录或非法访问", c)
+			c.Abort()
+			return
+		}
+
+		if service.IsBlacklist(token) {
+			response.FailWithDetailed(gin.H{"reload": true}, "您的帐户异地登陆或令牌失效", c)
+			c.Abort()
+			return
+		}
+		j := NewJWT()
+		claims, err := j.ParseToken(token)
+		if err != nil {
+			if err == TokenExpired {
+				response.FailWithDetailed(gin.H{"reload": true}, "授权已过期", c)
+				c.Abort()
+				return
+			}
+			response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
+			c.Abort()
+			return
+		}
+
+		if _, err = service.FindUserByUUID(claims.UUID.String()); err != nil {
+			_ = service.JSONInBlacklist(model.JwtBlacklist{Jwt: token})
+			response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
+			c.Abort()
+		}
+
+		if claims.ExpiresAt-time.Now().Unix() < claims.BufferTime {
+			claims.ExpiresAt = time.Now().Unix() + 60*60*24*7
+			newToken, _ := j.CreateToken(*claims)
+			newClaims, _ := j.ParseToken(newToken)
+			c.Header("new-token", newToken)
+			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt, 10))
+			if global.GVA_CONFIG.System.UseMultipoint {
+				RedisJwtToken, err := service.GetRedisJWT(newClaims.Username)
+				if err != nil {
+					global.GVA_LOG.Error("get redis jwt failed", zap.Any("err", err))
+				} else { // 当之前的取成功时才进行拉黑操作
+					_ = service.JSONInBlacklist(model.JwtBlacklist{Jwt: RedisJwtToken})
+				}
+				// 无论如何都要记录当前的活跃状态
+				_ = service.SetRedisJWT(newToken, newClaims.Username)
+			}
+		}
+		c.Set("claims", claims)
+		c.Next()
+	}
+}
+
+// CreateToken 创建token
 func (j *JWT) CreateToken(claims request.CustomClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(j.SigningKey)
 }
 
-/* // 解析 token
+// ParseToken 解析出token信息
 func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &request.CustomClaims{}, func(token *jwt.Token) (i interface{}, e error) {
 		return j.SigningKey, nil
@@ -110,9 +120,7 @@ func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
 		}
 		return nil, TokenInvalid
 
-	} else {
-		return nil, TokenInvalid
-
 	}
+	return nil, TokenInvalid
 
-} */
+}

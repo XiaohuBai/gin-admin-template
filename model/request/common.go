@@ -2,7 +2,7 @@
  * @Author: XiaohuBai
  * @Date: 2020-11-26 00:01:54
  * @LastEditors: XiaohuBai
- * @LastEditTime: 2020-11-26 00:02:03
+ * @LastEditTime: 2020-12-03 17:19:07
  * @Description: 描述
  */
 
@@ -29,3 +29,7 @@ type GetAuthorityId struct {
 }
 
 type Empty struct{}
+
+type RoleReq struct {
+	Role string `json:"role"`
+}

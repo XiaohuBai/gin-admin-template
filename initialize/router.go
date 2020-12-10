@@ -2,9 +2,10 @@
  * @Author: XiaohuBai
  * @Date: 2020-11-25 10:00:25
  * @LastEditors: XiaohuBai
- * @LastEditTime: 2020-12-01 13:54:49
+ * @LastEditTime: 2020-12-10 15:13:01
  * @Description: 初始化总路由
  */
+
 package initialize
 
 import (
@@ -35,11 +36,11 @@ func Routers() *gin.Engine {
 	{
 		router.InitBaseRouter(PublicGroup) // 注册基础功能路由 不做鉴权
 	}
-	/* 	PrivateGroup := Router.Group("")
-	   	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
-	   	{
-	   		router.InitMenuRouter(PrivateGroup) // 注册menu路由
-	   	} */
+	PrivateGroup := Router.Group("")
+	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
+	{
+		router.InitMenuRouter(PrivateGroup) // 注册menu路由
+	}
 	global.GVA_LOG.Info("router register success")
 	return Router
 }

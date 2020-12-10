@@ -2,10 +2,10 @@
  * @Author: XiaohuBai@outlook.com
  * @Date: 2020-12-01 14:41:16
  * @LastEditors: XiaohuBai
- * @LastEditTime: 2020-12-01 14:42:35
+ * @LastEditTime: 2020-12-10 17:30:30
  * @Description:jwt要生成的token内容、配置
  */
- 
+
 package request
 
 import (

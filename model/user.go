@@ -2,7 +2,7 @@
  * @Author: XiaohuBai
  * @Date: 2020-11-25 10:00:25
  * @LastEditors: XiaohuBai
- * @LastEditTime: 2020-12-02 10:30:10
+ * @LastEditTime: 2020-12-10 17:29:32
  * @Description: 描述
  */
 
@@ -17,7 +17,7 @@ import (
 type User struct {
 	gorm.Model
 	UUID      uuid.UUID `gorm:"type:varchar(50);not null;default:;comment:'uuid'" json:"uuid"`
-	Role      string    `gorm:"type:varchar(1);not null;default:'0';comment:'角色 0:普通用户,1:管理员'" json:"role"`
+	Role      string    `gorm:"type:varchar(1);not null;default:'';comment:'角色 0:普通用户,1:管理员'" json:"role"`
 	Username  string    `gorm:"type:varchar(50);not null;default:'';comment:'账户'" json:"username"`
 	Password  string    `gorm:"type:varchar(50);not null;default:'';comment:'密码'" json:"password"`
 	Nickname  string    `gorm:"type:varchar(50);not null;default:'昵称';comment:'昵称'" json:"nickname"`

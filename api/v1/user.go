@@ -44,6 +44,7 @@ func Login(c *gin.Context) {
 func token(user model.User, c *gin.Context) {
 	j := &middleware.JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
 	claims := request.CustomClaims{
+		ID:         user.ID,
 		UUID:       user.UUID,
 		Role:       user.Role,
 		Username:   user.Username,
