@@ -2,7 +2,7 @@
  * @Author: XiaohuBai@outlook.com
  * @Date: 2020-12-03 09:47:42
  * @LastEditors: XiaohuBai
- * @LastEditTime: 2020-12-07 22:49:59
+ * @LastEditTime: 2020-12-14 15:11:56
  * @Description: 描述
  */
 
@@ -29,8 +29,6 @@ func RoleMenus(role string) (menus []model.Menu, err error) {
 
 func menusListByRole(role string) (roleMenuList []model.Menu, err error) {
 	err = global.GVA_DB.Table("menus").Select("menus.*").Joins("left join role_menus on menus.id = role_menus.menu_id where role_menus.role = ?", role).Scan(&roleMenuList).Error
-	/* 	global.GVA_DB.Where("authority_id = ?", authorityId).Preload("Parameters").Find(&allMenus).Error
-	   	err = global.GVA_DB.Model(model.Menu{}).Select("*").Joins("left join role_menus on menus.id = role_menus.menu_id where role_menus.role = ?", role).Scan(menus).Error */
 	return
 }
 

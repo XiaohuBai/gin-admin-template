@@ -52,7 +52,7 @@ func token(user model.User, c *gin.Context) {
 		BufferTime: 60 * 60 * 24, // 缓冲时间1天 缓冲时间内会获得新的token刷新令牌 此时一个用户会存在两个有效令牌 但是前端只留一个 另一个会丢失
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix() - 1000,       // 签名生效时间
-			ExpiresAt: time.Now().Unix() + 60*60*24*7, // 过期时间 7天
+			ExpiresAt: time.Now().Unix() + 60*60*24*7, // 过期时间 7天 
 			Issuer:    "xiaohubai",                    // 签名的发行者
 		},
 	}
@@ -128,5 +128,16 @@ func ChangePassword(c *gin.Context) {
 		response.FailWithMessage("修改失败，原密码与当前账户不符", c)
 	} else {
 		response.OkWithMessage("修改成功", c)
+	}
+}
+
+// getJwtData 获取jwt数据
+func getJwtData(c *gin.Context) *request.CustomClaims {
+	if claims, exists := c.Get("claims"); !exists {
+		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析出来的用户信息失败, 请检查路由是否使用jwt中间件")
+		return nil
+	} else {
+		waitUse := claims.(*request.CustomClaims)
+		return waitUse
 	}
 }
